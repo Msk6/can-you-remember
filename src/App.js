@@ -3,16 +3,21 @@ import "./App.css";
 
 //imags
 import cardBack from './images/CardBack.jpg'
-import cards from './data';
+import allCards  from './data';
 
 //components
 import Card from './components/Card'
 
+//utils
+import {shuffle} from './utils'
+
 
 function App() {
 
-  const cardList = cards.map((card) => {
-    return <Card card={card} key={card.id}/>
+  const [cards, setCards] = useState(shuffle([...allCards, ...allCards]));
+
+  const cardList = cards.map((card, idx) => {
+    return <Card card={card} key={`${card.id}-${idx}`}/>
   })
 
   return (
