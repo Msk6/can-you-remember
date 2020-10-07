@@ -11,7 +11,10 @@ const Card = (props) => {
     const [flipped, changeFlip] = useState(false);  
     
     const handleFlip = () => {
-        changeFlip(!flipped)
+        if (flipped !== true){
+            changeFlip(true)
+            props.checkFlipped({ id: props.card.id, changeFlip: changeFlip });
+        }
     }
 
     return (
