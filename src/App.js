@@ -15,10 +15,6 @@ function App() {
     return <Card card={card} key={card.id}/>
   })
 
-  // const [cardImage, setCardImage] = useState(cardBack)
-  // const [defficulty, setDefficulty] = useState('')
-  // const [playerMode, setPlayerMode] = useState('')
-
   return (
   <div className="App border my-5">
     <div className="container">
