@@ -8,6 +8,7 @@ import { shuffle } from "../utils";
 
 // Components
 import Card from "./Card";
+import Score from "./Score";
 
 const Game = (props) => {
   const [cards, setCards] = useState([]);
@@ -28,17 +29,24 @@ const Game = (props) => {
     setCards(() => shuffle([...cards, ...cards]));
   }, [props.difficulty]); 
 
+  //To Store player score and pass them
+  const [score, setScore] = useState([0, 0]); //1
+
+  //To know which player's turn it is
+  const [playerTurn, setPlayerTurn] = useState(true); //2
+  const [failedFlips, increaseFailed] = useState(0); //3
+
   let flippedCards = [];
   const changeFlipped = anArray => {
     flippedCards = anArray;
-  }; //1
+  };
 
   const unflipCards = (unflip1, unflip2) => {
     setTimeout(() => {
       unflip1(false);
       unflip2(false);
     }, 1000);
-  }; //2
+  }; 
 
   const checkFlipped = flippedObject => {
     changeFlipped([...flippedCards, flippedObject]);
@@ -46,10 +54,21 @@ const Game = (props) => {
     if (flippedCards.length === 2) {
       if (flippedCards[0].id !== flippedCards[1].id) {
         unflipCards(flippedCards[0].changeFlip, flippedCards[1].changeFlip);
+        increaseFailed(failedFlips + 1); //4
+        setPlayerTurn(!playerTurn); //5
+      }else {
+        if (props.mode === "multi") {
+          if (playerTurn) {
+            //6
+            setScore([(score[0] += 1), score[1]]);
+          } else {
+            setScore([score[0], (score[1] += 1)]);
+          }
+        }
       }
       changeFlipped([]);
     }
-  }; //3
+  }; 
 
   //Mapping through the array of cards and placing them in the card component
   const cardsGrid = cards.map((card, idx) => (
@@ -62,6 +81,12 @@ const Game = (props) => {
         <div className=" col-9">
           <div className="row border">{cardsGrid}</div>
         </div>
+        <Score 
+          mode={props.mode}
+          score={score}
+          failedFlips={failedFlips}
+          playerTurn={playerTurn}
+        />
       </div>
     </div>
   );
